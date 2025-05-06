@@ -2,11 +2,11 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Моя Рулетка</title>
+  <title>Рулетка</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: linear-gradient(to bottom, #f9f9f9, #e0e0e0);
+      background: #f0f0f0;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -15,44 +15,96 @@
       margin: 0;
     }
 
-    h1 {
-      font-size: 36px;
-      margin-bottom: 20px;
+    .wheel {
+      position: relative;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      border: 10px solid #333;
+      overflow: hidden;
+      transform: rotate(0deg);
+      transition: transform 4s cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+
+    .segment {
+      position: absolute;
+      width: 50%;
+      height: 50%;
+      background: red;
+      transform-origin: 100% 100%;
+      clip-path: polygon(100% 100%, 0% 100%, 100% 0%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .arrow {
+      width: 0;
+      height: 0;
+      border-left: 20px solid transparent;
+      border-right: 20px solid transparent;
+      border-bottom: 30px solid #333;
+      position: absolute;
+      top: -40px;
+      left: 50%;
+      transform: translateX(-50%);
     }
 
     button {
-      padding: 15px 30px;
-      font-size: 20px;
-      background-color: #4CAF50;
+      margin-top: 40px;
+      padding: 10px 30px;
+      font-size: 18px;
+      background: #28a745;
       color: white;
       border: none;
       border-radius: 8px;
       cursor: pointer;
-      transition: background-color 0.3s;
-    }
-
-    button:hover {
-      background-color: #45a049;
     }
 
     #result {
-      margin-top: 30px;
-      font-size: 24px;
+      margin-top: 20px;
+      font-size: 20px;
       font-weight: bold;
     }
   </style>
 </head>
 <body>
-  <h1>Крути рулетку!</h1>
-  <button onclick="spin()">Крутить</button>
+  <div class="arrow"></div>
+  <div class="wheel" id="wheel"></div>
+  <button onclick="spin()">Крутить!</button>
   <div id="result"></div>
 
   <script>
-    const options = ['🎁 Приз 1', '🎉 Приз 2', '😢 Ничего', '💥 Приз 3', '🤫 Сюрприз', '🍕 Пицца!', '📦 Mystery Box'];
+    const prizes = ['🍕 Пицца', '🎁 Приз 2', '💣 Пусто', '🎉 Сюрприз', '📦 Mystery', '🚗 Машина', '💸 Деньги', '😢 Ничего'];
+    const wheel = document.getElementById('wheel');
+    const segmentAngle = 360 / prizes.length;
+    let currentRotation = 0;
+
+    // Создание сегментов
+    prizes.forEach((text, index) => {
+      const segment = document.createElement('div');
+      segment.className = 'segment';
+      segment.style.transform = `rotate(${index * segmentAngle}deg)`;
+      segment.style.background = `hsl(${index * (360 / prizes.length)}, 70%, 50%)`;
+      segment.innerHTML = `<div style="transform: rotate(-${index * segmentAngle}deg);">${text}</div>`;
+      wheel.appendChild(segment);
+    });
 
     function spin() {
-      const result = options[Math.floor(Math.random() * options.length)];
-      document.getElementById('result').innerText = 'Выпало: ' + result;
+      const randomIndex = Math.floor(Math.random() * prizes.length);
+      const fullSpins = 5; // Полных оборотов
+      const degreesToRotate = (fullSpins * 360) + (360 - randomIndex * segmentAngle - segmentAngle / 2);
+      currentRotation += degreesToRotate;
+
+      wheel.style.transform = `rotate(${currentRotation}deg)`;
+
+      setTimeout(() => {
+        document.getElementById('result').innerText = `Выпало: ${prizes[randomIndex]}`;
+      }, 4000);
     }
   </script>
 </body>
+</html>
