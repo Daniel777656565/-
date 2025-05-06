@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Моя Рулетка</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom, #f9f9f9, #e0e0e0);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    h1 {
+      font-size: 36px;
+      margin-bottom: 20px;
+    }
+
+    button {
+      padding: 15px 30px;
+      font-size: 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #result {
+      margin-top: 30px;
+      font-size: 24px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>Крути рулетку!</h1>
+  <button onclick="spin()">Крутить</button>
+  <div id="result"></div>
+
+  <script>
+    const options = ['🎁 Приз 1', '🎉 Приз 2', '😢 Ничего', '💥 Приз 3', '🤫 Сюрприз', '🍕 Пицца!', '📦 Mystery Box'];
+
+    function spin() {
+      const result = options[Math.floor(Math.random() * options.length)];
+      document.getElementById('result').innerText = 'Выпало: ' + result;
+    }
+  </script>
+</body>
